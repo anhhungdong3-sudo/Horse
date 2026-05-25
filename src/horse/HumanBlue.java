@@ -1,0 +1,29 @@
+package horse;
+
+import java.awt.Color;
+
+public class HumanBlue extends Human {
+	public HumanBlue(String name) {
+		super(name);
+		int x = 1, y = 8;
+		for (int i = 0; i < 6; i++) {
+			this.gridGoal.add(new GoalCell(i, new Coordinate(x, y)));
+			x++;
+		}
+		for (int i = 0; i < 4; i++) {
+			Piece p = new Piece(i, "blue", this);
+			addPiece(p);
+		}
+		barnCod = new Coordinate(0, 11);
+	}
+
+	@Override
+	public Color getColor() {
+		return Color.blue;
+	}
+
+	@Override
+	public String getColorStr() {
+		return "blue";
+	}
+}
