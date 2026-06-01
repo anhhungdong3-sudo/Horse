@@ -1,0 +1,33 @@
+package GameSetup;
+
+import MVC.Coordinate;
+
+public abstract class BoardCell {
+	protected int position;
+	protected Piece piece;
+	public Coordinate coordinate;
+
+	public BoardCell(int position, Coordinate cod) {
+		this.position = position;
+		this.coordinate = cod;
+		this.piece = null;
+	}
+
+	public int getPosition() {
+		return position;
+	}
+
+	public Piece getPiece() {
+		return piece;
+	}
+
+	public void setPiece(Piece piece) {
+		this.piece = piece;
+	}
+
+	public boolean isOccupied() {
+		return piece != null;
+	}
+
+	public abstract int getIndex();
+}

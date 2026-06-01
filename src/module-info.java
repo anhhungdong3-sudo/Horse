@@ -4,6 +4,6 @@
 /**
  * 
  */
-module newProject {
+module Horse {
 	requires java.desktop;
 }
