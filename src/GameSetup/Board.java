@@ -48,62 +48,12 @@ public class Board {
 			}
 		}
 	}
-
-	public List<BoardCell> getGridNormal() {
-		return gridNormal;
-	}
-
-	public List<Piece> getPiecesOnBoard() {
-		return piecesOnBoard;
-	}
-
-	public void addPiece(Piece piece) {
-		piecesOnBoard.add(piece);
-		gridNormal.get(piece.getBoardPosition()).setPiece(piece);
-	}
-
-	public void removePiece(Piece piece) {
-		int pos = piece.getBoardPosition();
-
-		// Nếu đang ở trên grid thường
-		if (pos >= 0 && pos < gridNormal.size()) {
-			BoardCell cell = gridNormal.get(pos);
-			if (cell.getPiece() == piece) {
-				cell.setPiece(null);
-			}
-		}
-
-		// Nếu đang ở đường goal
-		if (pos == -2) {
-			int goalPos = piece.getGoalPosition();
-			if (goalPos >= 0 && goalPos < piece.getOwner().gridGoal.size()) {
-				BoardCell goalCell = piece.getOwner().gridGoal.get(goalPos);
-				if (goalCell.getPiece() == piece) {
-					goalCell.setPiece(null);
-				}
-			}
-		}
-
-		// Nếu đã hoàn thành hoặc về chuồng (-3 hoặc -1), thì không cần xóa gì cả
-	}
-	public void updateTileEffects() {
-		// TODO Auto-generated method stub
-		
-	}
-	public int getStartPosition(String color) {
-		switch (color.toLowerCase()) {
-		case "red":
-			return 0;
-		case "blue":
-			return 14;
-		case "yellow":
-			return 28;
-		case "green":
-			return 42;
-		default:
-			return -1;
-		}
-	}
-
 	
+	public void resetBoard() {
+		for (BoardCell cell : this.gridNormal) {
+			cell.setPiece(null);
+		}
+		this.piecesOnBoard.clear();
+		System.out.println("Board has been reset.");
+	}
 }
