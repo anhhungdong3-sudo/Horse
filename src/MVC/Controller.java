@@ -19,8 +19,8 @@ public class Controller implements Observer {
 	private View view;
 	private Model model;
 	private Piece selectedPiece = null;
-	private int historyCounter = 0;
 	private boolean hasRolledDice = false;
+	private boolean Pause = false;
 
 	public Controller(Model model) {
 		this.model = model;
@@ -38,6 +38,22 @@ public class Controller implements Observer {
 	public void setSelectedPiece(Piece selectedPiece) {
 		this.selectedPiece = selectedPiece;
 	}
+	// lần 2 thêm nút dừng và reset
+		public boolean isPause() {
+			return Pause;
+		}
+
+		public void setPause(boolean pause) {
+			Pause = pause;
+		}
+
+		public void resumeGame() {
+			model.turn();
+		}
+
+		public void resetGame() {
+			model.getGame().resetGame();
+		}
 
 	// ===========================
 	// 💻 Thiết lập và bắt đầu game
@@ -55,6 +71,8 @@ public class Controller implements Observer {
 	// 🎲 Roll dice
 	// ===========================
 	public void rollDice() {
+		if (isPause())
+			return;
 		hasRolledDice = false;
 		Dice dice = model.getGame().getDice();
 		Player player = model.getGame().getCurrentPlayer();
@@ -65,7 +83,8 @@ public class Controller implements Observer {
 				for (int i = 0; i < 15; i++) {
 					dice.rollDice();
 					view.setIconDice(dice.getResult());
-					Thread.sleep(100);
+					Thread.sleep(0);
+//					Thread.sleep(100);
 				}
 
 				SwingUtilities.invokeLater(() -> {
