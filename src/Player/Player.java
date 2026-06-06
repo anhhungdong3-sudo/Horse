@@ -1,6 +1,7 @@
 package Player;
 
 import java.awt.Color;
+import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,8 +17,11 @@ public abstract class Player {
 	// 🧩 Thuộc tính cơ bản
 	// ==========================
 	protected String name;
+	protected Image pieceImage;
 	protected MoveStrategy move;
 	public Coordinate barnCod;
+	public int totalDiceRolls = 0;
+	public int[] diceFrequency = new int[6];
 
 	// ==========================
 	// 🎲 Dữ liệu gameplay
@@ -28,8 +32,9 @@ public abstract class Player {
 	// ==========================
 	// 🏗️ Khởi tạo
 	// ==========================
-	public Player(String name) {
+	public Player(String name, Image pieceImage) {
 		this.name = name;
+		this.pieceImage = pieceImage;
 		this.pieceList = new ArrayList<>();
 		this.gridGoal = new ArrayList<>();
 	}
@@ -39,6 +44,15 @@ public abstract class Player {
 	// ==========================
 	public String getName() {
 		return name;
+	}
+
+	// lần 2 thêm hình ảnh cho quân cờ
+	public Image getPieceImage() {
+		return pieceImage;
+	}
+
+	public void setPieceImage(Image pieceImage) {
+		this.pieceImage = pieceImage;
 	}
 
 	public void setMoveStrategy(MoveStrategy move) {
@@ -55,6 +69,14 @@ public abstract class Player {
 
 	public void setBarnCod(Coordinate barnCod) {
 		this.barnCod = barnCod;
+	}
+
+	public void recordDiceRoll(int value) {
+		if (value >= 1 && value <= 6) {
+			++this.totalDiceRolls;
+			int n = value - 1;
+			this.diceFrequency[n] = this.diceFrequency[n] + 1;
+		}
 	}
 
 	// ==========================

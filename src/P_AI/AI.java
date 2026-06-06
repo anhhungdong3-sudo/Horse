@@ -15,7 +15,7 @@ import GameSetup.BoardCell;
 import GameSetup.GoalCell;
 import GameSetup.MoveStrategy;
 import GameSetup.Piece;
-import GameSetup.Player;
+import Player.Player;
 import MVC.Coordinate;
 
 public abstract class AI extends Player {
