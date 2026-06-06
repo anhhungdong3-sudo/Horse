@@ -1,14 +1,15 @@
 package Player;
 
 import java.awt.Color;
+import java.awt.Image;
 
 import GameSetup.GoalCell;
 import GameSetup.Piece;
 import MVC.Coordinate;
 
 public class HumanYellow extends Human {
-	public HumanYellow(String name) {
-		super(name);
+	public HumanYellow(String name, Image pieceImage) {
+		super(name, pieceImage);
 
 		int x = 8, y = 15;
 		for (int i = 0; i < 6; i++) {
