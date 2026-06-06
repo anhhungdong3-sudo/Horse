@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import Player.Player;
-
 public class Game {
 	// ====================== FIELDS ======================
 	private final List<Player> players;
@@ -52,7 +50,8 @@ public class Game {
 				}
 
 				try {
-					Thread.sleep(800);
+					Thread.sleep(0);
+//					Thread.sleep(800);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -106,7 +105,8 @@ public class Game {
 		boolean success = currentPlayer.move(steps, piece, board);
 		if (!success) {
 			System.out.println("can't move.");
-			return;}
+			return;
+		}
 
 		if (currentPlayer.hasWon())
 			notifyWinner(currentPlayer);
@@ -219,6 +219,15 @@ public class Game {
 			}
 		}
 		return sb.toString();
+	}
+
+	public void resetGame() {
+		this.players.clear();
+		this.ranking.clear();
+		this.roundCount = 1;
+		this.currentPlayer = null;
+		this.board.resetBoard();
+		System.out.println("Game state has been reset.");
 	}
 
 	// ====================== UTILITIES ======================
