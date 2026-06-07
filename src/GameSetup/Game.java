@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import Player.Player;
 
 public class Game {
 	// ====================== FIELDS ======================
@@ -105,7 +106,8 @@ public class Game {
 		boolean success = currentPlayer.move(steps, piece, board);
 		if (!success) {
 			System.out.println("can't move.");
-			return;}
+			return;
+		}
 
 		if (currentPlayer.hasWon())
 			notifyWinner(currentPlayer);
@@ -257,5 +259,9 @@ public class Game {
 
 	public void addPlayer(Player p) {
 		players.add(p);
+	}
+
+	public void resetGame() {
+
 	}
 }

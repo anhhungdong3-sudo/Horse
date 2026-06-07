@@ -11,7 +11,7 @@ import GameSetup.BoardCell;
 import GameSetup.Dice;
 import GameSetup.Game;
 import GameSetup.Piece;
-import GameSetup.Player;
+import Player.Player;
 import GameSetup.SkipTurn;
 import P_AI.AI;
 
@@ -164,6 +164,7 @@ public class Controller implements Observer {
 			moveSelectedPiece();
 		else
 			selectedPiece = piece;
+
 		view.repaint();
 	}
 
