@@ -1,4 +1,4 @@
-package Player;
+package P_Human;
 
 import java.awt.Color;
 import java.awt.Image;

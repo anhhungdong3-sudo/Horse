@@ -1,9 +1,12 @@
-package Player;
+package P_Human;
+
+import java.awt.Image;
 
 import java.awt.Image;
 
 import GameSetup.Board;
 import GameSetup.Piece;
+import GameSetup.Player;
 
 public abstract class Human extends Player {
 	public Human(String name, Image pieceImage) {

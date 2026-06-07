@@ -1,18 +1,13 @@
-package Player;
+package GameSetup;
 
 import java.awt.Color;
 import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
 
-import GameSetup.Board;
-import GameSetup.BoardCell;
-import GameSetup.MoveStrategy;
-import GameSetup.Piece;
 import MVC.Coordinate;
 
 public abstract class Player {
-
 	// ==========================
 	// 🧩 Thuộc tính cơ bản
 	// ==========================

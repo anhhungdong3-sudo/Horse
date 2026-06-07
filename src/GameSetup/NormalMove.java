@@ -40,11 +40,7 @@ public class NormalMove implements MoveStrategy {
 			for (int i = 0; i < Math.abs(steps); i++) {
 				Piece midPiece = gridGoal.get(i).getPiece();
 				if (midPiece != null) {
-					boolean isLastStep = (i == Math.abs(steps) - 1);
-					if (isLastStep) {
-						System.out.println("Blocked by piece in goal path.");
 						return false;
-					}
 				}
 			}
 			
@@ -81,7 +77,7 @@ public class NormalMove implements MoveStrategy {
 					//3.2.3. thêm lại vào vị trí mới được thay đổi
 					gridGoal.get(dice - 2).setPiece(null);
 					System.out.println("Piece " + piece.getId() + " moved up to cell " + dice);
-					if (piece.getGoalPosition() == 5 - goFirst) {
+					if (piece.getGoalPosition() == (5 - goFirst)) {
 						//trường hợp đặc biệt đã hoàn thành
 						piece.setBoardPosition(-3);
 						System.out.println("Completed!");
