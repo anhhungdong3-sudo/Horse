@@ -14,85 +14,43 @@ import GameSetup.Game;
 import GameSetup.MoveStrategy;
 import GameSetup.NormalMove;
 import GameSetup.Piece;
-<<<<<<< Updated upstream
-import Player.Player;
-=======
 import GameSetup.Player;
->>>>>>> Stashed changes
 import GameSetup.SkipTurn;
 import P_AI.AI;
 import P_AI.AIEasy;
 import P_AI.AIHard;
 import P_AI.AINormal;
-<<<<<<< Updated upstream
-import Player.HumanBlue;
-import Player.HumanGreen;
-import Player.HumanRed;
-import Player.HumanYellow;
-=======
 import P_Human.HumanBlue;
 import P_Human.HumanGreen;
 import P_Human.HumanRed;
 import P_Human.HumanYellow;
->>>>>>> Stashed changes
 
 public class Model implements Subject {
+	private Game game;
+	private List<Observer> obList = new ArrayList<>();
 
-    private Game game;
-    private List<Observer> obList = new ArrayList<>();
+	public Model() {
+		this.game = new Game();
+	}
 
-    public Model() {
-        this.game = new Game();
-    }
+	public Game getGame() {
+		return game;
+	}
 
-    public Game getGame() {
-        return game;
-    }
+	public void addObserver(Observer ob) {
+		obList.add(ob);
+	}
 
-    public void addObserver(Observer ob) {
-        obList.add(ob);
-    }
+	@Override
+	public void removeObserver(Observer ob) {
+		obList.remove(ob);
+	}
 
-    @Override
-    public void removeObserver(Observer ob) {
-        obList.remove(ob);
-    }
+	// 🎲 Tung xúc xắc
+	public void rollDice() {
+		game.rollDice();
+	}
 
-<<<<<<< Updated upstream
-    // 🎲 Tung xúc xắc
-    public void rollDice() {
-        game.rollDice();
-    }
-
-    public static Image getPieceImage(String color) {
-        switch (color.toLowerCase()) {
-            case "red":
-                return new ImageIcon("img/pieceRed.png").getImage();
-            case "blue":
-                return new ImageIcon("img/pieceBlue.png").getImage();
-            case "yellow":
-                return new ImageIcon("img/pieceYellow.png").getImage();
-            case "green":
-                return new ImageIcon("img/pieceGreen.png").getImage();
-            default:
-                throw new IllegalArgumentException("Màu không hợp lệ: " + color);
-        }
-    }
-
-    // ⚙️ Thiết lập người chơi
-    public void setUpGame(List<String> humanColors, int humanCount, int totalPlayers, String DifficultyChose) {
-        int aiCount = totalPlayers - humanCount;
-        
-        // ===== 0. DANH SÁCH MÀU GỐC =====
-        List<String> allColors = new ArrayList<>(Arrays.asList("red", "blue", "green", "yellow"));
-        List<String> chosenColors = new ArrayList<>(humanColors);
-        List<String> randomPool = new ArrayList<>(allColors);
-        randomPool.removeAll(chosenColors);
-
-        List<String> finalHumanColors = new ArrayList<>();
-        List<String> finalAIColors = new ArrayList<>();
-        Random rand = new Random();
-=======
 	public static Image getPieceImage(String color) {
 		switch (color.toLowerCase()) {
 		case "red":
@@ -197,173 +155,110 @@ public class Model implements Subject {
 			}
 		}
 	}
->>>>>>> Stashed changes
 
-        // Ưu tiên màu đã tick cho Human
-        for (String color : chosenColors) {
-            if (finalHumanColors.size() >= humanCount) break;
-            finalHumanColors.add(color);
-        }
+	public void start() {
+		game.start();
+		notifyStart();
+		turn();
+	}
 
-        // Random bổ sung nếu thiếu
-        while (finalHumanColors.size() < humanCount && !randomPool.isEmpty()) {
-            finalHumanColors.add(randomPool.remove(rand.nextInt(randomPool.size())));
-        }
+	public void turn() {
+		if (!game.isGameOver()) {
+			Player currentPlayer = game.getCurrentPlayer();
+			if (currentPlayer.isAI())
+				notifyItsAI();
+			else
+				notifyItsHuman();
+		} else
+			notifyWin();
+	}
 
-        // PHÂN MÀU CHO AI
-        chosenColors.removeAll(finalHumanColors);
-        for (String color : chosenColors) {
-            if (finalAIColors.size() >= aiCount) break;
-            finalAIColors.add(color);
-        }
-        while (finalAIColors.size() < aiCount && !randomPool.isEmpty()) {
-            finalAIColors.add(randomPool.remove(rand.nextInt(randomPool.size())));
-        }
+	// 🧠 Lượt AI
+	public void handleAITurn(AI currentPlayer) {
+		int number = game.getDice().getResult();
+		List<Piece> lsPiece = game.getMovablePieces(number);
 
-        // ====== ADD HUMAN PLAYERS ======
-        for (String color : finalHumanColors) {
-            switch (color) {
-                case "red":
-                    game.addPlayer(new HumanRed("(Player RED)", getPieceImage(color)));
-                    break;
-                case "blue":
-                    game.addPlayer(new HumanBlue("(Player BLUE)", getPieceImage(color)));
-                    break;
-                case "yellow":
-                    game.addPlayer(new HumanYellow("(Player YELLOW)", getPieceImage(color)));
-                    break;
-                case "green":
-                    game.addPlayer(new HumanGreen("(Player GREEN)", getPieceImage(color)));
-                    break;
-            }
-        }
+		Piece chosenPiece = currentPlayer.decideMove(number, game.getBoard(), lsPiece);
+		MoveStrategy strategy = currentPlayer.decideStrategy(chosenPiece);
 
-        // ====== ADD AI PLAYERS ======
-        for (int i = 0; i < aiCount; i++) {
-            String color = finalAIColors.get(i);
-            String aiName = "(AI " + color.toUpperCase() + " | " + DifficultyChose + ")";
-            switch (DifficultyChose) {
-                case "Easy":
-                    game.addPlayer(new AIEasy(aiName, color, getPieceImage(color)));
-                    break;
-                case "Normal":
-                    game.addPlayer(new AINormal(aiName, color, getPieceImage(color)));
-                    break;
-                case "Hard":
-                    game.addPlayer(new AIHard(aiName, color, getPieceImage(color)));
-                    break;
-            }
-        }
-    }
+		if (lsPiece.isEmpty()) {
+			System.out.println("Player " + currentPlayer.getName() + " cannot move.");
+			game.move(new SkipTurn(), null);
+		} else {
+			game.move(strategy, chosenPiece);
+		}
 
-    public void start() {
-        game.start();
-        notifyStart();
-        turn();
-    }
+		notifyMove();
+		switchTurn();
+		SwingUtilities.invokeLater(this::turn);
+	}
 
-    public void turn() {
-        if (!game.isGameOver()) {
-            Player currentPlayer = game.getCurrentPlayer();
-            if (currentPlayer.isAI())
-                notifyItsAI();
-            else
-                notifyItsHuman();
-        } else
-            notifyWin();
-    }
+	public void switchTurn() {
+		Player current = game.getCurrentPlayer();
+		if (game.getDice().getResult() != 1 && game.getDice().getResult() != 6) {
+			game.switchTurn(current);
+			notifySwitchTurn();
+		}
+	}
 
-    // 🧠 Lượt AI
-    public void handleAITurn(AI currentPlayer) {
-        int number = game.getDice().getResult();
-        List<Piece> lsPiece = game.getMovablePieces(number);
-        Piece chosenPiece = currentPlayer.decideMove(number, game.getBoard(), lsPiece);
-        MoveStrategy strategy = currentPlayer.decideStrategy(chosenPiece);
+	// 🐴 Ra quân
+	public void deploy() {
+		Piece deployPiece = null;
+		for (Piece p : game.getCurrentPlayer().pieceList) {
+			if (p.getBoardPosition() == -1) {
+				deployPiece = p;
+				break;
+			}
+		}
+		game.move(new DeployHorse(), deployPiece);
+		notifyMove();
+		switchTurn();
+	}
 
-        if (lsPiece.isEmpty()) {
-            System.out.println("Player " + currentPlayer.getName() + " cannot move.");
-            game.move(new SkipTurn(), null);
-        } else {
-            game.move(strategy, chosenPiece);
-        }
+	// 🧭 Di chuyển quân
+	public void move(Piece piece) {
+		game.move(new NormalMove(), piece);
+		notifyMove();
+		SwingUtilities.invokeLater(() -> {
+			switchTurn();
+			turn();
+		});
+	}
 
-        notifyMove();           // 1.2 notifyMove() (cho AI)
-        switchTurn();
-        SwingUtilities.invokeLater(this::turn);
-    }
+	// 🧱 Observer
+	@Override
+	public void notifyStart() {
+		for (Observer o : obList)
+			o.updateStart();
+	}
 
-    public void switchTurn() {
-        Player current = game.getCurrentPlayer();
-        if (game.getDice().getResult() != 1 && game.getDice().getResult() != 6) {
-            game.switchTurn(current);
-            notifySwitchTurn();
-        }
-    }
+	@Override
+	public void notifySwitchTurn() {
+		for (Observer o : obList)
+			o.updateSwitchTurn();
+	}
 
-    // 🐴 Ra quân
-    public void deploy() {
-        Piece deployPiece = null;
-        for (Piece p : game.getCurrentPlayer().pieceList) {
-            if (p.getBoardPosition() == -1) {
-                deployPiece = p;
-                break;
-            }
-        }
-        game.move(new DeployHorse(), deployPiece);
-        notifyMove();           // 1.2 notifyMove()
-        switchTurn();
-    }
+	@Override
+	public void notifyItsAI() {
+		for (Observer o : obList)
+			o.updateItsAI();
+	}
 
-    // 🧭 Di chuyển quân - PHẦN QUAN TRỌNG THEO SEQUENCE
-    public void move(Piece piece) {
-        // 1.1 game.move()
-        game.move(new NormalMove(), piece);
+	@Override
+	public void notifyItsHuman() {
+		for (Observer o : obList)
+			o.updateItsHuman();
+	}
 
-        // 1.2 notifyMove()
-        notifyMove();
+	@Override
+	public void notifyMove() {
+		for (Observer o : obList)
+			o.updateMove();
+	}
 
-        SwingUtilities.invokeLater(() -> {
-            switchTurn();
-            turn();
-        });
-    }
-
-    // ==================== OBSERVER NOTIFY ====================
-
-    @Override
-    public void notifyStart() {
-        for (Observer o : obList)
-            o.updateStart();
-    }
-
-    @Override
-    public void notifySwitchTurn() {
-        for (Observer o : obList)
-            o.updateSwitchTurn();
-    }
-
-    @Override
-    public void notifyItsAI() {
-        for (Observer o : obList)
-            o.updateItsAI();
-    }
-
-    @Override
-    public void notifyItsHuman() {
-        for (Observer o : obList)
-            o.updateItsHuman();
-    }
-
-    @Override
-    public void notifyMove() {
-        // 1.2 notifyMove() - Thông báo cho View cập nhật
-        for (Observer o : obList)
-            o.updateMove();     // → Gọi 1.3 updateMove() ở View
-    }
-
-    @Override
-    public void notifyWin() {
-        for (Observer o : obList)
-            o.updateWin();
-    }
+	@Override
+	public void notifyWin() {
+		for (Observer o : obList)
+			o.updateWin();
+	}
 }

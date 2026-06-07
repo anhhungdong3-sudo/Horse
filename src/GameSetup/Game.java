@@ -268,8 +268,4 @@ public class Game {
 	public void addPlayer(Player p) {
 		players.add(p);
 	}
-
-	public void resetGame() {
-
-	}
 }

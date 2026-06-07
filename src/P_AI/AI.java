@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package P_AI;
 
 import java.awt.Color;
@@ -15,7 +13,7 @@ import GameSetup.BoardCell;
 import GameSetup.GoalCell;
 import GameSetup.MoveStrategy;
 import GameSetup.Piece;
-import Player.Player;
+import GameSetup.Player;
 import MVC.Coordinate;
 
 public abstract class AI extends Player {
