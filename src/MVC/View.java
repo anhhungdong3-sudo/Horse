@@ -193,7 +193,7 @@ public class View extends JFrame implements Observer {
 				int plus = 13;
 				// Vẽ ảnh bàn cờ
 				makeMap(positionToBounds, cellSize);
-				g2d.drawImage(boardImage, -5, -0, (cellSize * 17) + plus, (cellSize * 17) + plus, null);
+				g2d.drawImage(boardImage, -5, -0, (cellSize * 17) + plus, (cellSize * 17), null);
 
 				drawPieceAtBarn(cellSize, g2d);
 				drawPiece(cellSize, g2d);
