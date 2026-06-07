@@ -1,7 +1,5 @@
 package GameSetup;
 
-import Player.Player;
-
 public class Piece {
 	private int id;
 	private String color;

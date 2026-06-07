@@ -86,10 +86,12 @@ public class Board {
 
 		// Nếu đã hoàn thành hoặc về chuồng (-3 hoặc -1), thì không cần xóa gì cả
 	}
+
 	public void updateTileEffects() {
 		// TODO Auto-generated method stub
-		
+
 	}
+
 	public int getStartPosition(String color) {
 		switch (color.toLowerCase()) {
 		case "red":
@@ -105,5 +107,11 @@ public class Board {
 		}
 	}
 
-	
+	public void resetBoard() {
+		for (BoardCell cell : this.gridNormal) {
+			cell.setPiece(null);
+		}
+		this.piecesOnBoard.clear();
+		System.out.println("Board has been reset.");
+	}
 }
