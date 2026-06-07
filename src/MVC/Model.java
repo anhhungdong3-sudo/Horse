@@ -14,16 +14,16 @@ import GameSetup.Game;
 import GameSetup.MoveStrategy;
 import GameSetup.NormalMove;
 import GameSetup.Piece;
-import GameSetup.Player;
+import Player.Player;
 import GameSetup.SkipTurn;
 import P_AI.AI;
 import P_AI.AIEasy;
 import P_AI.AIHard;
 import P_AI.AINormal;
-import P_Human.HumanBlue;
-import P_Human.HumanGreen;
-import P_Human.HumanRed;
-import P_Human.HumanYellow;
+import Player.HumanBlue;
+import Player.HumanGreen;
+import Player.HumanRed;
+import Player.HumanYellow;
 
 public class Model implements Subject {
 	private Game game;

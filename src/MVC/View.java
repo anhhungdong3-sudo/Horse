@@ -41,7 +41,7 @@ import GameSetup.Board;
 import GameSetup.BoardCell;
 import GameSetup.Game;
 import GameSetup.Piece;
-import GameSetup.Player;
+import Player.Player;
 
 public class View extends JFrame implements Observer {
 	private static final long serialVersionUID = -8724949034995447071L;
@@ -169,7 +169,7 @@ public class View extends JFrame implements Observer {
 		// ======== Thiết lập cửa sổ ========
 		setTitle("Cờ cá ngựa – Chọn người chơi");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(500, 250);
+		setSize(500, 270);
 		setLocationRelativeTo(null);
 		setContentPane(startPanel);
 		setVisible(true);
@@ -177,7 +177,7 @@ public class View extends JFrame implements Observer {
 
 	private void showGameBoard() {
 		getContentPane().removeAll();
-		setSize(1175, 880);
+		setSize(1200, 880);
 		setLayout(new BorderLayout());
 
 		mainPanel = new JPanel() {
@@ -189,10 +189,11 @@ public class View extends JFrame implements Observer {
 				int width = getWidth();
 				int height = getHeight() - 130;
 				cellSize = Math.min(width, height) / 15;
+				makeMap(positionToBounds, cellSize);
 
 				int plus = 13;
 				// Vẽ ảnh bàn cờ
-				g2d.drawImage(boardImage, -5, -0, (cellSize * 17) + plus, (cellSize * 17) + plus, null);
+				g2d.drawImage(boardImage, 0, 0, (cellSize * 17) + plus, (cellSize * 17) + plus, null);
 
 				drawPieceAtBarn(cellSize, g2d);
 				drawPiece(cellSize, g2d);
@@ -330,7 +331,16 @@ public class View extends JFrame implements Observer {
 		int y = cell.coordinate.getY() * cellSize + padding;
 		int size = cellSize - 2 * padding;
 		g2d.setColor(color);
-		g2d.fillOval(x, y, size, size);
+		
+		// using image messes stuffs so this is just a quick fix
+		if (cell.getPosition() >= 0 && cell.getPosition() <= 13)
+			g2d.fillOval(x + 2, y + 2, size, size);
+		else if (cell.getPosition() >= 28 && cell.getPosition() <= 41)
+			g2d.fillOval(x + 2, y + 3, size, size);
+		else if (cell.getPosition() >= 42 && cell.getPosition() <= 55)
+			g2d.fillOval(x + 5, y + 5, size, size);
+		else
+			g2d.fillOval(x, y, size, size); // default
 	}
 
 	public void drawPiece(int cellSize, Graphics2D g2d) {
@@ -370,7 +380,16 @@ public class View extends JFrame implements Observer {
 		int x = cell.coordinate.getX() * cellSize + padding;
 		int y = cell.coordinate.getY() * cellSize + padding;
 		int size = cellSize - 2 * padding;
-		g2d.drawImage(player.getPieceImage(), x, y, size, size, null);
+		
+		// using image messes stuffs so this is just a quick fix
+		if (cell.getPosition() >= 0 && cell.getPosition() <= 13)
+			g2d.drawImage(player.getPieceImage(), x + 2, y + 2, size, size, null);
+		else if (cell.getPosition() >= 28 && cell.getPosition() <= 41)
+			g2d.drawImage(player.getPieceImage(), x + 2, y + 3, size, size, null);
+		else if (cell.getPosition() >= 42 && cell.getPosition() <= 55)
+			g2d.drawImage(player.getPieceImage(), x + 5, y + 5, size, size, null);
+		else
+			g2d.drawImage(player.getPieceImage(), x, y, size, size, null); // default
 	}
 
 	public void setModel(Model model) {
